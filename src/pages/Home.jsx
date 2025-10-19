@@ -1,20 +1,52 @@
 import MovieCard from "../components/MovieCard.jsx";
-import {useState} from "react"
-
+import {useEffect, useState} from "react"
+import {searchMovies, getPopularMovies} from "../services/api.js";
+import "../css/Home.css"
 function Home() {
     const[searchQuery, setSearchQuery] = useState("");
-    const movies = [
-        {id: 1, title: "John Wick", release_date:2020},
-        {id: 2, title: "Terminator", release_date:1999},
-        {id: 3, title: "The Matrix", release_date:1998},
+    const[movies,setMovies] = useState([]);
+    const[error, setError] = useState(null);
+    const[loading,setLoading] = useState(true);
 
-    ]
+    //if dependency array value changes then it will change, if blank it will only run once on mount
+    useEffect(() => {
+       const loadPopularMovies = async () => {
+           try {
+               const popularMovies = await getPopularMovies();
+               setMovies(popularMovies)
+           } catch (err) {
+               console.log(err);
+               setError("Failed to load movies...");
+           }
+           finally {
+               setLoading(false)
+           }
+       }
+        loadPopularMovies();
+    }, []);
 
-    const handleSearch = (e) => {
-        e.preventDefault()
-        alert(searchQuery)
-        setSearchQuery("")
-    }
+    const handleSearch = async (e) => {
+        e.preventDefault();
+        if (!searchQuery.trim()) return
+        if(loading)return
+
+
+        setLoading(true)
+        try {
+            const searchResults = await searchMovies(searchQuery);
+            setMovies(searchResults);
+            setError(null);
+        } catch(err) {
+            console.log(err);
+            setError("Failed to Search Movies...");
+        } finally {
+            setLoading(false);
+        }
+
+
+        setSearchQuery("");
+    };
+
 
 
     return (
@@ -29,6 +61,12 @@ function Home() {
             />
             <button type="submit" className = "search-button">Search</button>
         </form>
+
+        {error && <div className="error-message">{error}</div>}
+
+        {loading ? (
+            <div className="loading">Loading...</div>
+        ) : (
         <div className="movies-grid">
             {/*key needs to be added, react needs to know what component to update based on interaction, need unique identifier*/}
             {movies.map(
@@ -37,6 +75,7 @@ function Home() {
             )
             )}
         </div>
+        ) }
     </div>
     );
 }
