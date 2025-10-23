@@ -4,10 +4,15 @@
     gap: 20px;
     padding: 20px;
     justify-content: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    border-radius: 8px;
+    background-color: white;
+    width: fit-content;
+    margin: 40px auto;
 }
 
 .info-container img {
-    width: 200px;
+    width: 400px;
     height: auto;
     border-radius: 8px;
 }
@@ -15,3 +20,4 @@
 .movie-info {
     max-width: 600px;
 }
+

@@ -33,6 +33,23 @@
   line-height: 1.6;
 }
 
+.movies-grid {
+  display: flex;          /* or display: grid */
+  flex-wrap: wrap;        /* allow wrapping */
+  gap: 20px;              /* space between cards */
+  justify-content: center;/* center cards horizontally */
+}
+
+.movie-card {
+  max-width: 300px;   /* optional */
+  width: 100%;        /* take full width up to max-width */
+  border-radius: 8px;
+  overflow: visible;  /* important: allow text to show */
+  background-color: #232b2b;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column; /* stack poster and info vertically */
+}
 
 /* Animation for new favorites being added */
 @keyframes fadeIn {
